@@ -158,33 +158,41 @@ class _NavigationDrawerViewState extends State<NavigationDrawerView> {
             },
           ),
           SizedBox(height: 10),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Row(
-                children: [
-                  Container(
-                      width: 40,
-                      height: 40,
-                      padding: const EdgeInsets.all(10),
-                      decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(width: 1, color: Color(0xFFEDECFF)),
-                          borderRadius: BorderRadius.circular(10),
+          GestureDetector(
+            onTap: () {
+              
+              router.go('/login');
+              SharedPrefs.pref.clear();
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  children: [
+                    Container(
+                        width: 40,
+                        height: 40,
+                        padding: const EdgeInsets.all(10),
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            side:
+                                BorderSide(width: 1, color: Color(0xFFEDECFF)),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                      ),
-                      child: Image.asset('assets/images/logout.png')),
-                  SizedBox(width: 5),
-                  Text(
-                    'logout',
-                    style: TextStyle(
-                        color: Color(0xFF27274A),
-                        fontSize: 16,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
+                        child: Image.asset('assets/images/logout.png')),
+                    SizedBox(width: 5),
+                    Text(
+                      'logout',
+                      style: TextStyle(
+                          color: Color(0xFF27274A),
+                          fontSize: 16,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
