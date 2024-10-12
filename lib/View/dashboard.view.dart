@@ -1,12 +1,15 @@
 import 'package:demoproject/Utils/constants.dart';
+import 'package:demoproject/View/repoInfo.view.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../Controller/repo.controller.dart';
 import '../Model/repo.model.dart';
+import '../Utils/navigation.dart';
 import '../Utils/sharedPrefs.dart';
 import 'drawer.view.dart';
 
@@ -38,21 +41,21 @@ class _DashboardViewState extends State<DashboardView> {
                                   fontWeight: FontWeight.w500))),
                     )
                   : Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      wCompanyCard(provider),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text("Projects",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w500)),
-                      ),
-                      wProjectList(provider)
-                    ]));
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                          wCompanyCard(provider),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text("Projects",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                          wProjectList(provider)
+                        ]));
         }));
   }
 
@@ -129,16 +132,13 @@ class _DashboardViewState extends State<DashboardView> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(7)),
                           ),
-                          child: const Center(
+                          child:   Center(
                             child: Text(
-                              'VGTS ',
+                              '${provider.selectedOrganization?.id} ',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
                                 fontFamily: 'Inter',
-                                fontWeight: FontWeight.w500,
-                                height: 0.10,
-                                letterSpacing: 0.12,
                               ),
                             ),
                           ),
@@ -180,85 +180,95 @@ class _DashboardViewState extends State<DashboardView> {
     return Column(children: [
       ...List.generate((provider.repoInfos).length, (index) {
         Repository repoInfo = provider.repoInfos[index];
-        return wCardView(repoInfo, index);
+        return wCardView(repoInfo, index, provider);
       }),
     ]);
   }
 
-  wCardView(Repository repoInfo, int index) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: 80,
-        padding: const EdgeInsets.all(16),
-        decoration: ShapeDecoration(
-          color: Colors.white,
-          shape: RoundedRectangleBorder(
-            side: const BorderSide(width: 1, color: Color(0xFFF5F5FD)),
-            borderRadius: BorderRadius.circular(10),
+  wCardView(Repository repoInfo, int index, RepositoryProvider provider) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => RepoInfoView(
+                    repoInfo: repoInfo,
+                    selectedOrganization: provider.selectedOrganization)));
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: 80,
+          padding: const EdgeInsets.all(16),
+          decoration: ShapeDecoration(
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              side: const BorderSide(width: 1, color: Color(0xFFF5F5FD)),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            shadows: [
+              const BoxShadow(
+                color: Color(0xFFF9F9FF),
+                blurRadius: 12,
+                offset: Offset(0, 3),
+                spreadRadius: 0,
+              )
+            ],
           ),
-          shadows: [
-            const BoxShadow(
-              color: Color(0xFFF9F9FF),
-              blurRadius: 12,
-              offset: Offset(0, 3),
-              spreadRadius: 0,
-            )
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Container(
-                    width: 40,
-                    height: 40,
-                    padding: const EdgeInsets.all(10),
-                    decoration: ShapeDecoration(
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                            width: 1, color: Color(0xFFF5F5FD)),
-                        borderRadius: BorderRadius.circular(10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                      width: 40,
+                      height: 40,
+                      padding: const EdgeInsets.all(10),
+                      decoration: ShapeDecoration(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          side: const BorderSide(
+                              width: 1, color: Color(0xFFF5F5FD)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                    ),
-                    child: Image.network(repoInfo.owner.avatarUrl)),
-                SizedBox(width: 10),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      repoInfo.name,
-                      style: TextStyle(
-                          color: Color(0xFF27274A),
-                          fontSize: 16,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      repoInfo.owner.login,
-                      style: TextStyle(
-                          color: Color(0xFF5F607E),
-                          fontSize: 14,
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            Container(
-              width: 24,
-              height: 24,
-              clipBehavior: Clip.antiAlias,
-              decoration: BoxDecoration(),
-              child: Icon(FluentIcons.chevron_right_48_regular),
-            ),
-          ],
+                      child: Image.network(repoInfo.owner.avatarUrl)),
+                  SizedBox(width: 10),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        repoInfo.name,
+                        style: TextStyle(
+                            color: Color(0xFF27274A),
+                            fontSize: 16,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w500),
+                      ),
+                      Text(
+                        repoInfo.owner.login,
+                        style: TextStyle(
+                            color: Color(0xFF5F607E),
+                            fontSize: 14,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              Container(
+                width: 24,
+                height: 24,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(),
+                child: Icon(FluentIcons.chevron_right_48_regular),
+              ),
+            ],
+          ),
         ),
       ),
     );

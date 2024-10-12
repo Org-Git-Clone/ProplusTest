@@ -1,3 +1,4 @@
+import 'package:demoproject/Controller/repoInfo.controller.dart';
 import 'package:demoproject/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => OrganizationProvider()),
         ChangeNotifierProvider(create: (_) => RepositoryProvider()),
+        ChangeNotifierProvider(create: (_) => RepoInfoProvider()),
       ],child: MyApp()));
 }
 

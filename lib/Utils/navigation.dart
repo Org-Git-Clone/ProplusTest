@@ -15,11 +15,7 @@ String getInitialLocation() {
 }
 
 List<RouteBase> get routesInformation {
-  return [
-    buildLoginRoute(),
-    buildDashBoardRoute(),
-    buildRepoInfoRoute(),
-  ];
+  return [buildLoginRoute(), buildDashBoardRoute()];
 }
 
 GoRoute buildLoginRoute() {
@@ -27,12 +23,6 @@ GoRoute buildLoginRoute() {
       path: '/login',
       routes: [],
       builder: (context, state) => const LoginScreen());
-}
-GoRoute buildRepoInfoRoute() {
-  return GoRoute(
-      path: '/repo-info',
-      routes: [],
-      builder: (context, state) => const RepoInfoView());
 }
 
 GoRoute buildDashBoardRoute() {
