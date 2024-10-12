@@ -1,6 +1,7 @@
 import 'package:demoproject/Utils/sharedPrefs.dart';
 import 'package:demoproject/View/dashboard.view.dart';
 import 'package:demoproject/View/login.view.dart';
+import 'package:demoproject/View/repoInfo.view.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
@@ -16,7 +17,8 @@ String getInitialLocation() {
 List<RouteBase> get routesInformation {
   return [
     buildLoginRoute(),
-    buildDashBoardRoute()
+    buildDashBoardRoute(),
+    buildRepoInfoRoute(),
   ];
 }
 
@@ -25,6 +27,12 @@ GoRoute buildLoginRoute() {
       path: '/login',
       routes: [],
       builder: (context, state) => const LoginScreen());
+}
+GoRoute buildRepoInfoRoute() {
+  return GoRoute(
+      path: '/repo-info',
+      routes: [],
+      builder: (context, state) => const RepoInfoView());
 }
 
 GoRoute buildDashBoardRoute() {

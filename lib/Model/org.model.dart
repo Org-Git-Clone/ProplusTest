@@ -12,6 +12,8 @@ class OrganizationModel {
   final String avatarUrl;
   final String? description;
 
+  var name;
+
   OrganizationModel({
     required this.login,
     required this.id,

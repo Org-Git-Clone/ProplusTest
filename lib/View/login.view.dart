@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:demoproject/Controller/org.controller.dart';
+import 'package:demoproject/Controller/repo.controller.dart';
 import 'package:demoproject/Utils/navigation.dart';
 import 'package:demoproject/Utils/sharedPrefs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../Utils/constants.dart';
 
@@ -122,8 +125,16 @@ class _LoginScreenState extends State<LoginScreen> {
       SharedPrefs.setUserName(
           userCredential.additionalUserInfo?.username ?? "");
       if (context.mounted) {
+        // Fetch organizations only once during initialization
+        var orgList = Provider.of<OrganizationProvider>(context, listen: false);
+        await orgList.fetchOrganizations();
+        if (orgList.organizations.length > 0) {
+          Provider.of<RepositoryProvider>(context, listen: false)
+              .fetchRepoForOrg(orgList.organizations.first);
+        }
         router.pop();
         SharedPrefs.isLoggedin(1);
+
         router.go('/dashboard');
       }
     } catch (e) {

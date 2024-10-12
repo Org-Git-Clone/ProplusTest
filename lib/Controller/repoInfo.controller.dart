@@ -8,18 +8,17 @@ import '../Model/org.model.dart';
 
 import '../Utils/sharedPrefs.dart';
 
-class RepositoryProvider with ChangeNotifier {
-  List<Repository> _repoInfos = [];
-
-  List<Repository> get repoInfos => _repoInfos;
-
+class RepoInfoProvider with ChangeNotifier {
   OrganizationModel? _selectedOrganization;
-  OrganizationModel? get selectedOrganization => _selectedOrganization;
+  Repository? _repoInfo;
 
-  Future<void> fetchRepoForOrg(OrganizationModel org) async {
+  OrganizationModel? get selectedOrganization => _selectedOrganization;
+  Repository? get repoInfo => _repoInfo;
+
+  Future<void> fetchRepoForOrg(OrganizationModel org, Repository repoInfos) async {
     try {
       final response = await http.get(
-        Uri.parse(org.reposUrl),
+        Uri.parse('${repoInfos.url}/branches'),
       );
       show_log_error("ORGLIST is ${org.reposUrl}");
       show_log_error("ORGLIST is response ${response.body}");
@@ -27,7 +26,7 @@ class RepositoryProvider with ChangeNotifier {
       if (response.statusCode == 200) {
         final List data = jsonDecode(response.body);
         _selectedOrganization = org;
-        _repoInfos = data.map((repo) => Repository.fromJson(repo)).toList();
+        
         notifyListeners();
       } else {
         throw Exception('Failed to load organizations');

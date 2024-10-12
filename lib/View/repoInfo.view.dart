@@ -10,14 +10,14 @@ import '../Model/repo.model.dart';
 import '../Utils/sharedPrefs.dart';
 import 'drawer.view.dart';
 
-class DashboardView extends StatefulWidget {
-  const DashboardView({super.key});
+class RepoInfoView extends StatefulWidget {
+  const RepoInfoView({super.key});
 
   @override
-  State<DashboardView> createState() => _DashboardViewState();
+  State<RepoInfoView> createState() => _RepoInfoViewState();
 }
 
-class _DashboardViewState extends State<DashboardView> {
+class _RepoInfoViewState extends State<RepoInfoView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
